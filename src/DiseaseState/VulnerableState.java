@@ -10,9 +10,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class VulnerableState extends State {
-    Map<Specimen, Integer> timesMap = new HashMap<>();
+
     public VulnerableState(){
         this.color = Color.orange;
+    }
+    public VulnerableState(State original){
+        this.color = original.color;
+        this.infectionDuration = original.infectionDuration;
+        this.timesMap = new HashMap<>(original.timesMap);
     }
     @Override
     public void infect(Specimen s1, Specimen s2) {
@@ -33,7 +38,7 @@ public class VulnerableState extends State {
                 Specimen key = entry.getKey();
 
                 if(DistCalc.calculateDistance(s1, key)>2)
-                    timesMap.put(key, 0);
+                    iterator.remove();
             }
         }
     }

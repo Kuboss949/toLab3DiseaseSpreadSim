@@ -1,6 +1,6 @@
 package population;
 
-import DiseaseState.State;
+import DiseaseState.*;
 import vectors.Vector2D;
 
 import java.util.Random;
@@ -12,7 +12,7 @@ public class Specimen {
     private Vector2D velocityVector;
     private double x;
     private double y;
-    private Random random;
+    private final Random random;
 
     public Specimen(State initialState, double x, double y){
         this.state = initialState;
@@ -20,6 +20,22 @@ public class Specimen {
         this.y = y;
         random = new Random();
         changeVector();
+    }
+    public Specimen(Specimen original){
+        this.y = original.y;
+        this.x = original.x;
+        this.velocityVector = new Vector2D(original.velocityVector);
+        this.random = original.random;
+        if(original.state instanceof VulnerableState){
+            this.state = new VulnerableState(original.state);
+        }else if (original.state instanceof ImmuneState){
+            this.state = new ImmuneState();
+        }else if (original.state instanceof InfectedSymptompsState){
+            this.state = new InfectedSymptompsState(original.state.getInfectionDuration());
+        }else {
+            this.state = new InfectedNoSymptompsState(original.state.getInfectionDuration());
+        }
+
     }
 
     private void changeVector(){

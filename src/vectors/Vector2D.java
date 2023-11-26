@@ -9,6 +9,10 @@ public class Vector2D implements IVector {
         this.x = x;
         this.y = y;
     }
+    public Vector2D(Vector2D original){
+        this.x = original.x;
+        this.y = original.y;
+    }
     @Override
     public double abs() {
         double[] components = this.getComponents();

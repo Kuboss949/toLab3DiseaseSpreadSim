@@ -1,10 +1,5 @@
 import javax.swing.*;
 
-/*
-* TODO: zaimplementowanie metod zarażania,
-*   podtrzymanie zakażenia,
-*   memento
-* */
 public class Main {
     public static void main(String[] args) {
         JFrame window = new JFrame();

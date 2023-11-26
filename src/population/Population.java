@@ -4,14 +4,16 @@ import DiseaseState.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
-public class Population {
+public class Population implements Cloneable{
     private ArrayList<Specimen> specimenList;
-    private double maxX;
-    private double maxY;
+
     private boolean immunity;
     private Random random;
+    private double maxX;
+    private double maxY;
 
 
 
@@ -25,14 +27,14 @@ public class Population {
     }
 
     public void movePopulation(){
-        for (int i = 0; i < specimenList.size(); i++) {
-            Specimen s = specimenList.get(i);
+        Iterator<Specimen> iterator = specimenList.iterator();
+        while (iterator.hasNext()) {
+            Specimen s = iterator.next();
             s.move();
 
             if (s.isOnBorder(maxX, maxY)) {
                 if (random.nextBoolean()) {
-                    specimenList.remove(i);
-                    i--;
+                    iterator.remove(); // Use iterator to remove the element safely
                 } else {
                     s.reverseDirection();
                 }
@@ -40,10 +42,10 @@ public class Population {
                 s.changeDirection();
             }
             specimenList.stream().forEach(potentialNeighbour -> {s.getState().infect(s, potentialNeighbour);});
-            if(i>=0 && specimenList.get(i).getState().isInfected()){
-                specimenList.get(i).getState().decreaseInfectionDuration();
-                if(!specimenList.get(i).getState().isInfected()){
-                    specimenList.get(i).setState(new ImmuneState());
+            if(s.getState().isInfected()){
+                s.getState().decreaseInfectionDuration();
+                if(!s.getState().isInfected()){
+                    s.setState(new ImmuneState());
                 }
             }
         }
@@ -76,18 +78,20 @@ public class Population {
         specimenList.add(new Specimen(state, x, y));
     }
 
-    public void drawPopulation(Graphics g, int size, int width, int height){
-        Graphics2D g2 = (Graphics2D) g;
-        for (var specimen:
-             specimenList) {
-            g2.setColor(specimen.getState().color);
-            int x = (int) (specimen.getX() / maxX * width);
-            int y = (int) (specimen.getY() / maxY * height);
-
-            g2.fillOval(x, y, size, size);
-        }
+    public ArrayList<Specimen> getSpecimenList() {
+        return specimenList;
     }
 
-
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Population cloned = (Population) super.clone();
+        // Create a new list and add cloned elements
+        ArrayList<Specimen> copyList = new ArrayList<>();
+        for (Specimen originalSpecimen : this.specimenList) {
+            // Use the copy constructor of Specimen for deep copy
+            copyList.add(new Specimen(originalSpecimen));
+        }
+        cloned.specimenList = copyList;
+        return cloned;
+    }
 }
