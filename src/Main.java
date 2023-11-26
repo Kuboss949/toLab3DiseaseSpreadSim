@@ -1,10 +1,10 @@
-import DiseaseState.IState;
-import population.Specimen;
-
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/*
+* TODO: zaimplementowanie metod zarażania,
+*   podtrzymanie zakażenia,
+*   memento
+* */
 public class Main {
     public static void main(String[] args) {
         JFrame window = new JFrame();
@@ -17,9 +17,12 @@ public class Main {
         window.pack();
 
 
+
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+        simPanel.startSimThread();
+        //simPanel.run();
 
     }
 }

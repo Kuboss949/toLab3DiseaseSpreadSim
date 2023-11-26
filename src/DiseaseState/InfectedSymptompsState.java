@@ -2,10 +2,16 @@ package DiseaseState;
 
 import population.Specimen;
 
-public class InfectedSymptompsState implements IState{
+import java.awt.*;
 
+public class InfectedSymptompsState extends State {
+
+    public InfectedSymptompsState(int duration){
+        color = Color.red;
+        infectionDuration = duration;
+    }
     @Override
-    public void infect(Specimen neighboor) {
+    public void infect(Specimen specimen1, Specimen specimen2) {
 
     }
 }
